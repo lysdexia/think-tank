@@ -12,6 +12,3 @@ auth = auth_roles(app)
 
 # initialize routes
 routes(app)
-
-
-
