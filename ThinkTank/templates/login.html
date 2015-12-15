@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<h1>Login</h1>
+
+{% if error is defined %}
+<p>{{ error }}</p>	
+{% endif %}
+
+<form id="login-form" method="POST">
+	<div class="row">
+		<label for="email" class="cell">Email: </label>
+		{% if email is defined %}
+		<input type="text" name="email" value={{ email }}></input>
+		{% else %}
+		<input type="text" name="email"></input>
+		{% endif %}
+	</div>
+
+	<div class="row">
+		<label for="password" class="cell">Password: </label>
+		<input type="password" name="password"></input><br>
+	</div>
+
+	<div class="row">
+		<label class="cell"></label>
+		<input type="submit" value="Log In"></input>
+	</div>
+</form>
+
+<h1>Forgot Login</h1>
+<form id="derp-form" METHOD="POST">
+	<input type="hidden" name="forgot" value=1></input>
+	<div class="row">
+		<label for="email" class="cell">Email: </label>
+		<input type="text" name="email"></input>
+	</div>
+
+	<div class="row">
+		<label class="cell"></label>
+		<input type="submit" value="I Forgot"></input>
+	</div>
+</form>
+
+<h1>Register</h1>
+<form id="registration-form" method="POST">
+	<input type="hidden" name="register" value=1></input>
+	<div class="row">
+		<label for="email" class="cell">Email: </label>
+		{% if email is defined %}
+		<input type="text" name="email" value={{ email }}></input>
+		{% else %}
+		<input type="text" name="email"></input>
+		{% endif %}
+	</div>
+
+	<div class="row">
+		<label for="password" class="cell">Password: </label>
+		<input type="password" name="password"></input><br>
+	</div>
+
+	<div class="row">
+		<label for="password_again" class="cell">Password Again: </label>
+		<input type="password" name="password_again"></input><br>
+	</div>
+
+	<div class="row">
+		<label class="cell"></label>
+		<input type="submit" value="Register"></input>
+	</div>
+</form>
+
+
+{% endblock %}

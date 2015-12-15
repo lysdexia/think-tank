@@ -1,0 +1,6 @@
+*.swp
+*.pyc
+.env
+venv
+local.run.py
+node_modules
