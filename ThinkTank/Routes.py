@@ -1,9 +1,23 @@
 # -*- coding: utf-8 -*-
 import uuid
 from flask import render_template, abort, request, session, redirect, url_for, g
-from flaskext.auth import permission_required, logout
+from flaskext.auth import AuthUser, permission_required, logout
 
 def routes(app): 
+        
+    # grab static users from json
+    # other users from db
+    @app.before_request
+    def init_users():
+        g.users = {}
+        g.roles = {}
+        for email in app.config["USERS"]:
+            user = AuthUser(username=email)
+            user.set_and_encrypt_password(
+                    app.config["USERS"][email]["password"])
+            user.role = app.config["USERS"][email]["role"]
+            g.users[email] = user
+            g.roles[email] = app.config["USERS"][email]["role"]
 
     @permission_required(resource="read", action="posts")
     def index():
