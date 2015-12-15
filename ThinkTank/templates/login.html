@@ -10,6 +10,7 @@
 {% endif %}
 
 <form id="login-form" method="POST">
+	<span id="login-error"></span>
 	<div class="row">
 		<label for="email" class="cell">Email: </label>
 		{% if email is defined %}
@@ -26,7 +27,8 @@
 
 	<div class="row">
 		<label class="cell"></label>
-		<input type="submit" value="Log In"></input>
+		<!--input type="submit" value="Log In"></input-->
+		<button id="login-button" type="button">Log In</button>
 	</div>
 </form>
 

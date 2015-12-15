@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, g
+from ThinkTank.api.ThinkTank import api
 from ThinkTank.Roles import auth_roles
 from ThinkTank.Routes import routes
 
@@ -12,3 +13,6 @@ auth = auth_roles(app)
 
 # initialize routes
 routes(app)
+
+# initialize api
+api(app)

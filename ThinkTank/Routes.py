@@ -9,6 +9,7 @@ def routes(app):
     # other users from db
     @app.before_request
     def init_users():
+        g.tokens = {}
         g.users = {}
         g.roles = {}
         for email in app.config["USERS"]:
