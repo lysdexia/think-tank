@@ -14,7 +14,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, ".env"))
 
 APP_SECRET_KEY = os.environ["APP_SECRET_KEY"]
-MONGOLAB_URI = os.environ["MONGOLAB_URI"]
+COUCHDB_SERVER = os.environ["COUCHDB_SERVER"]
+COUCHDB_DATABASE = os.environ["COUCHDB_DATABASE"]
 
 USERS = {
         "doug.shawhan@gmail.com": {

@@ -1,10 +1,33 @@
 # -*- coding: utf-8 -*-
+import datetime
 import uuid
 from flask import render_template, abort, request, session, redirect, url_for, g
 from flaskext.auth import AuthUser, permission_required, logout
 
-def routes(app): 
-        
+def routes(app, couchdb, views): 
+
+    def insert_user(email, password, role): 
+        # you'll need to do an upsert first, then 
+        # suck it all back out of the database and configure roles
+        db_user = views.User(
+                email = email,
+                password = app.config["USERS"][email]["password"],
+                role = app.config["USERS"][email]["role"],
+                stamp = datetime.datetime.utcnow(),
+                last_login = datetime.datetime.utcnow(),
+                member_since = datetime.datetime.utcnow(),
+                )
+        db_user.save()
+
+    def get_user(email):
+        results = views.User.view("user/email", key=email).first()
+        if results:
+            doc = results._doc
+            print(doc)
+
+    def upsert_user(email, password, role):
+        pass
+       
     # grab static users from json
     # other users from db
     @app.before_request
@@ -17,6 +40,7 @@ def routes(app):
             user.set_and_encrypt_password(
                     app.config["USERS"][email]["password"])
             user.role = app.config["USERS"][email]["role"]
+
             g.users[email] = user
             g.roles[email] = app.config["USERS"][email]["role"]
 
