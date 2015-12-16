@@ -5,13 +5,12 @@ def couch_views(couchdb):
     class Views(object):
 
         class User(couchdb.Document):
-            email = couchdb.StringProperty()
+            username = couchdb.StringProperty()
             password = couchdb.StringProperty()
+            salt = couchdb.StringProperty()
             role = couchdb.StringProperty()
-            token = couchdb.StringProperty()
-            stamp = couchdb.DateTimeProperty()
-            member_since = couchdb.DateTimeProperty()
-            last_login = couchdb.DateTimeProperty()
+            created = couchdb.DateTimeProperty()
+            modified = couchdb.DateTimeProperty()
 
         class Post(couchdb.Document):
             subject = couchdb.StringProperty()
