@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 # http://www.mongoalchemy.org/
-def think_tank_views(db):
+from flask.ext.mongoalchemy import MongoAlchemy
+from mongoalchemy.document import Index
+def get_views(app):
+    db = MongoAlchemy(app)
 
-    class Views(object):
+    class Post(db.Document):
+        subject = db.StringField()
+        title = db.StringField()
+        author = db.StringField()
+        content = db.StringField()
+        thread = db.StringField()
+        stamp = db.DateTimeField()
+        media = db.ListField(db.StringField(), default_empty=True)
+        subject_index = Index().ascending("subject")
+        thread_index = Index().ascending("subject").ascending("thread")
 
-        class Post(db.document.Document):
-            subject = db.fields.StringField()
-            title = db.fields.StringField()
-            author = db.fields.StringField()
-            content = db.fields.StringField()
-            thread = db.fields.StringField()
-            parent_thread = db.fields.StringField()
-            stamp = db.fields.DateTimeField()
-            media = db.fields.ListField()
-
-    return Views()
+    app.Post = Post

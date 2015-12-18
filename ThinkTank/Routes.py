@@ -4,23 +4,22 @@ import uuid
 from flask import render_template, abort, request, session, redirect, url_for, g
 from flaskext.auth import AuthUser, permission_required, logout
 
-def routes(app, views): 
+def routes(app): 
 
     # grab static users from json
     # other users from db
-    @app.before_request
-    def init_users():
-        g.tokens = {}
-        g.users = {}
-        g.roles = {}
-        for email in app.config["USERS"]:
-            user = AuthUser(username=email)
-            user.set_and_encrypt_password(
-                    app.config["USERS"][email]["password"])
-            user.role = app.config["USERS"][email]["role"]
-
-            g.users[email] = user
-            g.roles[email] = app.config["USERS"][email]["role"]
+    #@app.before_request
+    #def init_users():
+    #    g.tokens = {}
+    #    g.users = {}
+    #    g.roles = {}
+    #    for email in app.config["USERS"]:
+    #        user = AuthUser(username=email)
+    #        user.set_and_encrypt_password(
+    #                app.config["USERS"][email]["password"])
+    #        user.role = app.config["USERS"][email]["role"]
+    #        g.users[email] = user
+    #        g.roles[email] = app.config["USERS"][email]["role"]
 
     @permission_required(resource="read", action="posts")
     def index():
@@ -43,7 +42,6 @@ def routes(app, views):
     app.add_url_rule("/admin", "admin_block", admin_block)
 
     # only register, login and logout don't require permissions
-
     @app.route("/register", methods = ["GET", "POST"])
     def register():
         if request.method == "POST":
