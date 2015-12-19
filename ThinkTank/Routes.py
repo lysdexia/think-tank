@@ -3,23 +3,29 @@ import datetime
 import uuid
 from flask import render_template, abort, request, session, redirect, url_for, g
 from flaskext.auth import AuthUser, permission_required, logout
+from flaskext.auth.models.sa import get_user_class
 
-def routes(app): 
+def routes(app, db): 
+    User = get_user_class(db.Model)
 
-    # grab static users from json
-    # other users from db
-    #@app.before_request
-    #def init_users():
-    #    g.tokens = {}
-    #    g.users = {}
-    #    g.roles = {}
-    #    for email in app.config["USERS"]:
-    #        user = AuthUser(username=email)
-    #        user.set_and_encrypt_password(
-    #                app.config["USERS"][email]["password"])
-    #        user.role = app.config["USERS"][email]["role"]
-    #        g.users[email] = user
-    #        g.roles[email] = app.config["USERS"][email]["role"]
+    def user_create():
+        if request.method == 'POST':
+            username = request.form['username']
+            if User.query.filter(User.username==username).first():
+                return 'User already exists.'
+            password = request.form['password']
+            user = User(username=username, password=password, role="admin")
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('index'))
+        return '''
+                <form method="POST">
+                    Username: <input type="text" name="username"/><br/>
+                    Password: <input type="password" name="password"/><br/>
+                    <input type="submit" value="Create"/>
+                </form>
+            '''
+    app.add_url_rule('/users/create/', 'user_create', user_create, methods=['GET', 'POST'])
 
     @permission_required(resource="read", action="posts")
     def index():
@@ -50,9 +56,11 @@ def routes(app):
 
     @app.route("/login", methods = ["GET", "POST"])
     def login():
+
         if request.method == "POST":
             email = request.form["email"]
 
+            """
             if "register" in request.form and request.form["register"]:
                 return render_template(
                         "login.html",
@@ -67,16 +75,16 @@ def routes(app):
                         "login.html",
                         error = "Password reset sent to %s."%email)
 
-            if not g.users[email].authenticate(request.form["password"]):
-                return render_template(
+            """
+
+            user = User.query.filter(User.username==email).one()
+            if user is not None:
+                if not user.authenticate(request.form["password"]):
+                    return render_template(
                         "login.html",
                         error = "Incorrect password for %s."%email,
                         email = email)
-            # make available for use by api calls
-            session["email"] = email
-            # friendly access_token for api to use
-            session["access_token"] = str(uuid.uuid4())
-            return redirect(url_for("index"))
+                return redirect(url_for("index"))
         return render_template("login.html")
 
     @app.route("/logout")

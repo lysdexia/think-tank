@@ -6,7 +6,7 @@ from flask.ext import restful
 from flask_restful import reqparse
 from flaskext.auth import AuthUser, permission_required, logout
 
-def api(app):
+def api(app, db):
 
     class Auth(restful.Resource):
         """

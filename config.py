@@ -7,7 +7,7 @@ flask automagically includes ALL_CAPS values in the app.config object
 (see main.py app.config.from_object)
 """
 DEBUG = True
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = DEBUG
 
 # path to use when daemonized
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -19,8 +19,6 @@ TIMEZONE = tzlocal()
 
 APP_SECRET_KEY = os.environ["APP_SECRET_KEY"]
 
-MONGOALCHEMY_CONNECTION_STRING = os.environ["MONGOLAB_URI"]
-# bug in flask-mongoalchemy!
-MONGOALCHEMY_DATABASE=os.environ["MONGOALCHEMY_DATABASE"]
+SQLALCHEMY_DATABASE_URI = os.environ["SQLALCHEMY_DATABASE_URI"] 
 
 del os
